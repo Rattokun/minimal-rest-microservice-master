@@ -1,0 +1,29 @@
+name: yc cd
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build the Docker image
+      run: docker build ./securities-microservice --tag cr.yandex/${{secrets.YC_REGISTRY_ID }}/microservice:latest
+
+    - name: Log to YC
+      uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
+      with:
+        registry: cr.yandex
+        username: json_key
+        password: ${{ secrets.YC_KEYS }}
+
+    - name: Push Tag to YC Registry
+      run: docker push cr.yandex/${{secrets.YC_REGISTRY_ID }}/microservice:latest
+
