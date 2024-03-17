@@ -9,8 +9,6 @@ import os
 
 app = FastAPI()
 
-
-
 app.add_middleware(
     CORSMiddleware,
     allow_origins=['*'],
@@ -18,6 +16,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 @app.get("/")
 async def root():
@@ -27,13 +26,14 @@ async def root():
 
 
 @app.get("/list/")
-async def get_list(q: list | None = Query()):
+async def get_list():
     film_list = []
-    for id in q:
-        r = requests.get(f"trefle.io/api/v1/species",
-                         headers={'Authorization': '_nWoT7ek3RMYpCvaSLfrE3S1BWXblk1df3IeA2ww064'})
-        film_list.append(r.json())
+
+    r = requests.get(f"trefle.io/api/v1/species",
+                     headers={'Authorization': '_nWoT7ek3RMYpCvaSLfrE3S1BWXblk1df3IeA2ww064'})
+    film_list.append(r.json())
     return film_list
 
+
 if __name__ == "__main__":
-    uvicorn.run(app,host="0.0.0.0", port=int(os.getenv('PORT', 80)))
+    uvicorn.run(app, host="0.0.0.0", port=int(os.getenv('PORT', 80)))
