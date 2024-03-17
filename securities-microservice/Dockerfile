@@ -1,9 +1,11 @@
-FROM python:3.10
+FROM python:3.11.7-slim-bullseye
 
-RUN mkdir /code
-WORKDIR /code
-ADD . /code/
+WORKDIR /app
+COPY * /app/
+
 RUN pip install -r requirements.txt
 
-EXPOSE 2023
-CMD ["python3",  "/code/app.py"]
+#RM if loading to yandex
+EXPOSE 80
+
+CMD ["python", "main.py"]
