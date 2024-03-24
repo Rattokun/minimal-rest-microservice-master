@@ -20,12 +20,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 def root_to_json(token):
     data = {'token': token}
     data = json.dumps(data)  # dict to string
-    data = json.loads(data)  # string to json
-    print
-    data['Processes']
+    return json.loads(data)  # string to json
+
 
 tracer = trace.get_tracer("calculator")
 def calc(num1, num2, operation):
