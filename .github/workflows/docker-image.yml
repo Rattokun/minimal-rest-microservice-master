@@ -22,8 +22,8 @@ jobs:
           sleep 5
       - name: Run tests
         run: |
-          pytest integrat.py
-          pytest component.py
+          pytest ./securities-microservice/integrat.py
+          pytest ./securities-microservice/component.py
 
   build:
     needs: [ test ]
