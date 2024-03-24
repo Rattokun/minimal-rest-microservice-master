@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import trace
+
 from fastapi import FastAPI, Query
 from fastapi.middleware.cors import CORSMiddleware
 import requests
@@ -25,13 +27,28 @@ def root_to_json(token):
     print
     data['Processes']
 
+tracer = trace.get_tracer("calculator")
+def calc(num1, num2, operation):
+    with tracer.start_as_current_span("calculate"):
+        result = None
+        if operation == 'add':
+            result = num1 + num2
+        elif operation == 'subtract':
+            result = num1 - num2
+        elif operation == 'multiply':
+            result = num1 * num2
+        elif operation == 'divide':
+            if num2 != 0:
+                result = num1 / num2
+            else:
+                result = "Error: Division by zero"
+        return result
+
 @app.get("/")
 async def root():
     r = root_to_json("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9"
                      ".eyJ1c2VyX2lkIjoxLCJlbWFpbCI6Im1pa2UucGF5bmVAZXhhbXBsZS5jb20iLCJpYXQiOjE3MTA2ODYxOTAsImV4cCI6MTcxMDY4OTc5MH0.O8dsdrzcXIwsuhO_OXi_QCxCiMm-XzVDuOJhGyKzLVY")
     return r
-
-
 
 @app.get("/list/")
 async def get_list():
