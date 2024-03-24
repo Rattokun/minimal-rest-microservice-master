@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import trace
+from opentelemetry import trace
 
 from fastapi import FastAPI, Query
 from fastapi.middleware.cors import CORSMiddleware
